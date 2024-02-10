@@ -42,16 +42,25 @@ export const bookRouter = router({
       })
     )
     .mutation(async (opts) => {
-      console.log("SCANNING");
       try {
-        const book = await opts.ctx.prisma.book.update({
-          where: { isbn: opts.input.isbn },
-          data: {
-            ownedBy: {
-              push: opts.ctx.user.id,
-            },
+        const book = await opts.ctx.prisma.book.findUniqueOrThrow({
+          where: {
+            isbn: opts.input.isbn,
           },
         });
+
+        if (!book.ownedBy.includes(opts.ctx.user.id)) {
+          await opts.ctx.prisma.book.update({
+            where: {
+              id: book.id,
+            },
+            data: {
+              ownedBy: {
+                push: opts.ctx.user.id,
+              },
+            },
+          });
+        }
 
         return book;
       } catch (err) {
