@@ -14,7 +14,7 @@ model Book {
   id       String   @id @default(cuid())
   isbn     String   @unique
   title    String
-  author   String
+  author   String[]
   subjects String[]
   ownedBy  String[]
 }
