@@ -1,9 +1,17 @@
-import { authedProcedure, router } from "..";
+import { authedProcedure, publicProcedure, router } from "..";
 import { z } from "zod";
 import { isPrismaNotFoundError } from "../../lib/utils";
 import { fetchBookFromIsbn } from "../../lib/api/books";
 
 export const bookRouter = router({
+  getOpenLibraryBook: publicProcedure
+    .input(z.object({ isbn: z.string() }))
+    .query(async (opts) => {
+      return {
+        ...(await fetchBookFromIsbn(opts.input.isbn)),
+        cover: `https://covers.openlibrary.org/b/isbn/${opts.input.isbn}-M.jpg`,
+      };
+    }),
   getShelf: authedProcedure.query(async (opts) => {
     const books = await opts.ctx.prisma.book.findMany({
       where: {
@@ -34,6 +42,7 @@ export const bookRouter = router({
       })
     )
     .mutation(async (opts) => {
+      console.log("SCANNING");
       try {
         const book = await opts.ctx.prisma.book.update({
           where: { isbn: opts.input.isbn },
