@@ -1,10 +1,4 @@
-import {
-  useEffect,
-  useState,
-  MouseEvent,
-  SetStateAction,
-  Dispatch,
-} from "react";
+import { useEffect, useState } from "react";
 import { trpc } from "../lib/trpc";
 import {
   Dialog,
@@ -33,7 +27,7 @@ const Book = (props: { book: Book }) => {
           src={`https://covers.openlibrary.org/b/isbn/${props.book.isbn}.jpg?default=false`}
         />
       ) : (
-        <div className="hover:cursor-pointer mr-[3ch] rounded-sm font-semibold rotate-180 [user-select:none] p-2 whitespace-nowrap [writing-mode:vertical-rl] bg-teal-950">
+        <div className="hover:cursor-pointer mr-[3ch] rounded-sm font-semibold rotate-180 [user-select:none] p-2 whitespace-nowrap [writing-mode:vertical-rl] bg-teal-950 text-amber-50">
           {props.book.title}
         </div>
       )}
@@ -58,7 +52,7 @@ export const Bookshelf = () => {
                   <DialogTrigger key={book.id}>
                     <Book book={book} />
                   </DialogTrigger>
-                  <DialogContent className="bg-stone-900">
+                  <DialogContent className="bg-amber-50">
                     <DialogHeader>{book.title}</DialogHeader>
                   </DialogContent>
                 </Dialog>

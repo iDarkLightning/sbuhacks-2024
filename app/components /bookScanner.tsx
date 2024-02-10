@@ -69,7 +69,7 @@ export const BookScanner = () => {
   return (
     <Drawer.Root shouldScaleBackground>
       <Drawer.Trigger asChild>
-        <button>Open Drawer</button>
+        <button>Scan New Book</button>
       </Drawer.Trigger>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 bg-black/40" />
@@ -90,8 +90,8 @@ export const BookScanner = () => {
             <Drawer.NestedRoot open={isOpen} onOpenChange={setIsOpen}>
               <Drawer.Portal>
                 <Drawer.Overlay className="fixed inset-0 bg-black/40" />
-                <Drawer.Content className="bg-zinc-100 flex flex-col rounded-t-[10px] mt-24 fixed bottom-0 right-0 left-0 min-h-[45%]">
-                  <div className="p-4 bg-white rounded-t-[10px] flex-1">
+                <Drawer.Content className="bg-amber-50 flex flex-col rounded-t-[10px] mt-24 fixed bottom-0 right-0 left-0 min-h-[45%]">
+                  <div className="p-4 bg-amber-50 rounded-t-[10px] flex-1">
                     <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-4" />
                     <div className="flex items-center justify-center flex-col">
                       <Drawer.Title className="font-medium mb-1 text-center text-xl">
