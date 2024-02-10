@@ -5,6 +5,7 @@ import {
   SignedOut,
 } from "@clerk/clerk-react";
 import { Bookshelf } from "../components /bookshelf";
+import { BookScanner } from "../components /bookScanner";
 import { trpc } from "../lib/trpc";
 import { useState } from "react";
 
@@ -35,6 +36,7 @@ export const HomeView = () => {
         <SignInButton />
       </SignedOut>
       <div className="p-2 m-auto md:w-[80%] lg:w-[50%]">
+        <BookScanner />
         <Bookshelf />
       </div>
     </div>
