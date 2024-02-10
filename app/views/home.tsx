@@ -6,7 +6,7 @@ export const HomeView = () => {
 
   return (
     <div>
-      <h1>{data}</h1>
+      <h1>{JSON.stringify(data)}</h1>
       <Bookshelf />
     </div>
   );
