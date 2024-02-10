@@ -9,7 +9,7 @@ import { Bookshelf } from "../components /bookshelf";
 
 export const HomeView = () => {
   return (
-    <div className="text-amber-950">
+    <div>
       <SignedIn>
         <SignOutButton />
         <div className="p-2 m-auto md:w-[80%] lg:w-[50%]">
