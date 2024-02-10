@@ -40,7 +40,7 @@ export const Bookshelf = () => {
 
   return (
     <>
-      <div className="flex flex-col gap-1 p-1 bg-stone-700 rounded-md shadow-lg">
+      <div className="flex flex-col gap-1 p-1 bg-teal-900 rounded-md shadow-lg">
         {shelves.map((shelf, idx) => (
           <div
             key={idx}
