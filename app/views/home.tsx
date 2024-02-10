@@ -1,7 +1,9 @@
+import { Bookshelf } from "../components /bookshelf";
+
 export const HomeView = () => {
   return (
     <div>
-      <h1>Hello, World!</h1>
+      <Bookshelf />
     </div>
   );
 };
