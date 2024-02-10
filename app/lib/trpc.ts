@@ -1,12 +1,22 @@
 import { createTRPCReact, httpBatchLink } from "@trpc/react-query";
 import type { ApiRouter } from "../../server/trpc";
+import type { GetToken } from "@clerk/types";
 
 export const trpc = createTRPCReact<ApiRouter>();
 
-export const trpcClient = trpc.createClient({
-  links: [
-    httpBatchLink({
-      url: "http://localhost:5173/api",
-    }),
-  ],
-});
+export const createTrpcClient = (getToken: GetToken) =>
+  trpc.createClient({
+    links: [
+      httpBatchLink({
+        url: "http://localhost:5173/api",
+        async headers() {
+          const token = await getToken();
+          console.log(token);
+
+          return {
+            Authorization: token ? `Bearer ${token}` : "",
+          };
+        },
+      }),
+    ],
+  });

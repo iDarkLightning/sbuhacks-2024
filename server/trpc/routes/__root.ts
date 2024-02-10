@@ -1,11 +1,12 @@
-import { PrismaClient } from "@prisma/client";
-import { publicProcedure, router } from "..";
-
-const prisma = new PrismaClient();
+import { authedProcedure, publicProcedure, router } from "..";
 
 export const apiRouter = router({
-  test: publicProcedure.query(() => {
-    return prisma.test.findMany();
+  test: publicProcedure.query(({ ctx }) => {
+    return ctx.prisma.test.findMany();
+  }),
+
+  me: authedProcedure.query(({ ctx }) => {
+    return ctx.user.firstName;
   }),
 });
 

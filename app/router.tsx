@@ -13,7 +13,10 @@ interface CreateRouterOptions {
 
 const routeTree = rootRoute.addChildren([homeRoute]);
 
-export const createRouter = ({ trpcClient, queryClient }: CreateRouterOptions) =>
+export const createRouter = ({
+  trpcClient,
+  queryClient,
+}: CreateRouterOptions) =>
   _createRouter({
     routeTree,
     Wrap: ({ children }) => {
@@ -30,5 +33,6 @@ export const createRouter = ({ trpcClient, queryClient }: CreateRouterOptions) =
         client: trpcClient,
         queryClient,
       }),
+      authState: undefined!,
     },
   });
