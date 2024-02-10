@@ -25,7 +25,9 @@ export const HomeView = () => {
       <SignedOut>
         <SignInButton />
       </SignedOut>
-      <Bookshelf />
+      <div className="p-2 m-auto md:w-[80%] lg:w-[50%]">
+        <Bookshelf />
+      </div>
     </div>
   );
 };
