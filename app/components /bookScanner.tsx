@@ -3,12 +3,20 @@ import { useEffect, useState } from "react";
 import { IoIosAddCircle } from "react-icons/io";
 // import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import { useZxing } from "react-zxing";
+import { trpc } from "../lib/trpc";
 
 const Inner = () => {
   const [result, setResult] = useState("");
+  const utils = trpc.useUtils();
+  const scan = trpc.book.scan.useMutation({
+    onSuccess: () => utils.book.getShelf.invalidate(),
+  });
+
   const { ref } = useZxing({
     onDecodeResult(result) {
       setResult(result.getText());
+
+      scan.mutate({ isbn: result.getText() });
     },
   });
 

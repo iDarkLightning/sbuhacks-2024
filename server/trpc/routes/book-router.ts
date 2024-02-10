@@ -4,14 +4,28 @@ import { isPrismaNotFoundError } from "../../lib/utils";
 import { fetchBookFromIsbn } from "../../lib/api/books";
 
 export const bookRouter = router({
-  getAll: authedProcedure.input(z.object({})).query(async (opts) => {
-    return opts.ctx.prisma.book.findMany({
+  getShelf: authedProcedure.query(async (opts) => {
+    const books = await opts.ctx.prisma.book.findMany({
       where: {
         ownedBy: {
           has: opts.ctx.user.id,
         },
       },
+      select: {
+        isbn: true,
+        title: true,
+        id: true,
+      },
     });
+
+    const CHUNK_SIZE = 15;
+    const chunks = [];
+
+    for (let i = 0; i < books.length; i += CHUNK_SIZE) {
+      chunks.push(books.slice(i, i + CHUNK_SIZE));
+    }
+
+    return chunks;
   }),
   scan: authedProcedure
     .input(
