@@ -1,5 +1,13 @@
 import { trpc } from "../lib/trpc";
 
+const Book = (props: { title: string }) => {
+  return (
+    <div className="rounded-sm font-semibold h-fit self-end rotate-180 [user-select:none] p-2 whitespace-nowrap [writing-mode:vertical-rl] bg-amber-50">
+      {props.title}
+    </div>
+  );
+};
+
 export const Bookshelf = () => {
   const [shelves] = trpc.book.getShelf.useSuspenseQuery();
 

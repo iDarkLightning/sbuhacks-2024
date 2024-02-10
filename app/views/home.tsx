@@ -31,14 +31,14 @@ export const HomeView = () => {
       <SignedIn>
         <SignOutButton />
         <Authed />
+        <div className="p-2 m-auto md:w-[80%] lg:w-[50%]">
+          <BookScanner />
+          <Bookshelf />
+        </div>
       </SignedIn>
       <SignedOut>
         <SignInButton />
       </SignedOut>
-      <div className="p-2 m-auto md:w-[80%] lg:w-[50%]">
-        <BookScanner />
-        <Bookshelf />
-      </div>
     </div>
   );
 };

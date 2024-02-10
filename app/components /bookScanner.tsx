@@ -1,5 +1,6 @@
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { useEffect, useState } from "react";
+import { IoIosAddCircle } from "react-icons/io";
 // import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import { useZxing } from "react-zxing";
 import { trpc } from "../lib/trpc";
@@ -40,7 +41,9 @@ export const BookScanner = () => {
   return (
     <>
       <Dialog>
-        <DialogTrigger>Open</DialogTrigger>
+        <DialogTrigger>
+          <IoIosAddCircle className="text-2xl hover:text-lime-600 transition-colors outline-1" />
+        </DialogTrigger>
         <DialogContent className="bg-amber-50">
           <Inner />
         </DialogContent>
