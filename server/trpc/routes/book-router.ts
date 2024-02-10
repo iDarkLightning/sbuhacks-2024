@@ -5,8 +5,12 @@ import { fetchBookFromIsbn } from "../../lib/api/books";
 
 export const bookRouter = router({
   getAll: authedProcedure.input(z.object({})).query(async (opts) => {
-    const books = opts.ctx.prisma.book.findMany({
-      where: {},
+    return opts.ctx.prisma.book.findMany({
+      where: {
+        ownedBy: {
+          has: opts.ctx.user.id,
+        },
+      },
     });
   }),
   scan: authedProcedure
