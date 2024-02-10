@@ -21,7 +21,7 @@ export const BookScanner = () => {
     <Dialog>
       <DialogTrigger>Open</DialogTrigger>
       <DialogContent className="bg-amber-50">
-        <video className="rounded-sm" ref={ref} />
+        <video className="rounded-sm z-20" ref={ref} />
         <p>
           <span>Last result:</span>
           <span>{result}</span>

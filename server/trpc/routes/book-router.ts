@@ -4,6 +4,11 @@ import { isPrismaNotFoundError } from "../../lib/utils";
 import { fetchBookFromIsbn } from "../../lib/api/books";
 
 export const bookRouter = router({
+  getAll: authedProcedure.input(z.object({})).query(async (opts) => {
+    const books = opts.ctx.prisma.book.findMany({
+      where: {},
+    });
+  }),
   scan: authedProcedure
     .input(
       z.object({
