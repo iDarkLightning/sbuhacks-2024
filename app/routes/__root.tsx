@@ -1,3 +1,11 @@
-import { createRootRoute } from "@tanstack/react-router";
+import { createRootRouteWithContext } from "@tanstack/react-router";
+import { createTRPCQueryUtils } from "@trpc/react-query";
+import { ApiRouter } from "../../server/trpc";
 
-export const rootRoute = createRootRoute({});
+interface RouterContext {
+  queryUtils: ReturnType<typeof createTRPCQueryUtils<ApiRouter>>;
+}
+
+export const rootRoute = createRootRouteWithContext<RouterContext>()({
+  wrapInSuspense: true,
+});
