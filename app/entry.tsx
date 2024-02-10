@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import { createRouter } from "./router";
 import { queryClient } from "./lib/query-client";
 import { trpcClient } from "./lib/trpc";
+import "./index.css";
 
 const rootElement = document.getElementById("root")!;
 
