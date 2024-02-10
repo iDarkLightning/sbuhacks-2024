@@ -8,7 +8,7 @@ export const createTrpcClient = (getToken: GetToken) =>
   trpc.createClient({
     links: [
       httpBatchLink({
-        url: "http://localhost:5173/api",
+        url: "/api",
         async headers() {
           const token = await getToken();
           console.log(token);
