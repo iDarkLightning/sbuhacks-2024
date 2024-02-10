@@ -5,7 +5,7 @@ export const HomeView = () => {
   const [data] = trpc.test.useSuspenseQuery();
 
   return (
-    <div>
+    <div className="text-amber-950">
       <h1>{JSON.stringify(data)}</h1>
       <div className="p-2 m-auto md:w-[80%] lg:w-[50%]">
         <Bookshelf />
