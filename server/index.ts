@@ -2,7 +2,7 @@ import { Hono } from "hono";
 
 const app = new Hono();
 
-app.get("/", (ctx) => {
+app.get("/ping", (ctx) => {
   return ctx.text("Hello, World!");
 });
 
