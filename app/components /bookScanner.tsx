@@ -1,3 +1,4 @@
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { useEffect, useState } from "react";
 // import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import { useZxing } from "react-zxing";
@@ -17,12 +18,15 @@ export const BookScanner = () => {
   // https://www.npmjs.com/package/react-qr-barcode-scanner
 
   return (
-    <>
-      <video ref={ref} />
-      <p>
-        <span>Last result:</span>
-        <span>{result}</span>
-      </p>
-    </>
+    <Dialog>
+      <DialogTrigger>Open</DialogTrigger>
+      <DialogContent className="bg-amber-50">
+        <video className="rounded-sm" ref={ref} />
+        <p>
+          <span>Last result:</span>
+          <span>{result}</span>
+        </p>
+      </DialogContent>
+    </Dialog>
   );
 };
