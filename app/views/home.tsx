@@ -6,10 +6,22 @@ import {
 } from "@clerk/clerk-react";
 import { Bookshelf } from "../components /bookshelf";
 import { trpc } from "../lib/trpc";
+import { useState } from "react";
 
 const Authed = () => {
-  const [user] = trpc.me.useSuspenseQuery();
-  return JSON.stringify(user);
+  const [isbn, setIsbn] = useState("");
+  const scan = trpc.book.scan.useMutation();
+
+  return (
+    <>
+      <input
+        type="text"
+        value={isbn}
+        onChange={(evt) => setIsbn(evt.target.value)}
+      />
+      <button onClick={() => scan.mutate({ isbn })}>Add Book</button>
+    </>
+  );
 };
 
 export const HomeView = () => {
