@@ -26,7 +26,7 @@ const Inner = () => {
 
   return (
     <>
-      <video ref={ref}></video>
+      <video className="rounded-sm" ref={ref}></video>
       <p>
         <span>Last result:</span>
         <span>{result}</span>
