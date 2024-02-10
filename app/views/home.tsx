@@ -7,7 +7,9 @@ export const HomeView = () => {
   return (
     <div>
       <h1>{JSON.stringify(data)}</h1>
-      <Bookshelf />
+      <div className="p-2 m-auto md:w-[80%] lg:w-[50%]">
+        <Bookshelf />
+      </div>
     </div>
   );
 };
