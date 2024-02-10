@@ -27,7 +27,7 @@ const Authed = () => {
 
 export const HomeView = () => {
   return (
-    <div className="text-amber-950">
+    <div>
       <SignedIn>
         <SignOutButton />
         <Authed />

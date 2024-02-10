@@ -44,7 +44,7 @@ export const BookScanner = () => {
         <DialogTrigger>
           <IoIosAddCircle className="text-2xl hover:text-lime-600 transition-colors outline-1" />
         </DialogTrigger>
-        <DialogContent className="bg-amber-50">
+        <DialogContent className="bg-stone-900">
           <Inner />
         </DialogContent>
       </Dialog>
