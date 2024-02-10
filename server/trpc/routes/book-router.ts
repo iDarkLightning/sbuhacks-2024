@@ -19,11 +19,6 @@ export const bookRouter = router({
           has: opts.ctx.user.id,
         },
       },
-      select: {
-        isbn: true,
-        title: true,
-        id: true,
-      },
     });
 
     const CHUNK_SIZE = 15;

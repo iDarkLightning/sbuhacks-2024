@@ -53,7 +53,11 @@ export const Bookshelf = () => {
                     <Book book={book} />
                   </DialogTrigger>
                   <DialogContent className="bg-amber-50">
-                    <DialogHeader>{book.title}</DialogHeader>
+                    <DialogHeader className="text-2xl">{`${book.title} by ${book.author}`}</DialogHeader>
+                    <div>
+                      <h1 className="text-lg">Topics:</h1>
+                      <p>{book.subjects.join(", ")}</p>
+                    </div>
                   </DialogContent>
                 </Dialog>
               </div>
