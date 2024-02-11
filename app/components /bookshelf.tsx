@@ -18,6 +18,8 @@ import {
   FormMessage,
 } from "./ui/form";
 import { trpc } from "../lib/trpc";
+import { useUser } from "@clerk/clerk-react";
+import { Link } from "@tanstack/react-router";
 
 type TBook = RouterOutput["book"]["getShelf"][number][number];
 
@@ -51,7 +53,10 @@ const ReviewForm: React.FC<{ book: TBook }> = (props) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-8 my-8 max-w-3xl"
+      >
         <FormField
           control={form.control}
           name="content"
@@ -92,7 +97,7 @@ const BookCover = (props: { book: TBook }) => {
           src={data.url}
         />
       ) : (
-        <div className="hover:cursor-pointer mr-[3ch] rounded-sm font-semibold rotate-180 [user-select:none] p-2 whitespace-nowrap [writing-mode:vertical-rl] bg-teal-950 text-amber-50 truncate max-h-[18ch]">
+        <div className="hover:cursor-pointer mr-[3ch] rounded-sm font-semibold rotate-180 [user-select:none] p-2 whitespace-nowrap [writing-mode:vertical-rl] bg-indigo-950 text-amber-50 truncate max-h-[18ch]">
           {props.book.title}
         </div>
       )}
@@ -100,11 +105,12 @@ const BookCover = (props: { book: TBook }) => {
   );
 };
 
-const Book: React.FC<{ book: TBook }> = (props) => {
+const Book: React.FC<{ book: TBook; isMine: boolean }> = (props) => {
   const { isDesktop } = useWindowSize();
   const [reviews] = trpc.book.review.getAll.useSuspenseQuery({
     id: props.book.id,
   });
+  const user = useUser();
 
   return (
     <Drawer.Root
@@ -118,15 +124,15 @@ const Book: React.FC<{ book: TBook }> = (props) => {
         <Drawer.Overlay className="fixed inset-0 bg-black/40" />
         <Drawer.Content
           className={cn(
-            "bg-white flex flex-col rounded-t-[10px] mt-24 fixed bottom-0 right-0",
+            "bg-white/80 backdrop-blur-md flex flex-col rounded-t-[10px] mt-24 fixed bottom-0 right-0",
             isDesktop
-              ? "h-full w-[80%] md:w-[70%] lg:w-[60%]"
+              ? "h-full md:max-w-[70%] lg:max-w-[60%]"
               : "w-full h-max max-h-[95%]"
           )}
         >
           <div
             className={cn(
-              "bg-white rounded-t-[10px] flex-1",
+              "rounded-t-[10px] flex-1",
               isDesktop ? "p-12" : "p-4"
             )}
           >
@@ -156,8 +162,60 @@ const Book: React.FC<{ book: TBook }> = (props) => {
               </div>
               {isDesktop && <BookCover book={props.book} />}
             </div>
-            <p>{JSON.stringify(reviews)}</p>
-            <ReviewForm book={props.book} />
+            <div className="my-4 flex flex-col gap-4">
+              <p className="font-medium">Reviews</p>
+              {reviews.length === 0 ? (
+                <div className="p-8 border-2 border-dashed items-center justify-center flex flex-col gap-1 border-stone-800">
+                  <p className="text-lg font-medium">
+                    This book has no reviews
+                  </p>
+                  {props.isMine ? (
+                    <p>Be the first to leave a review below</p>
+                  ) : (
+                    <p>Read the book and be the first to leave a review!</p>
+                  )}
+                </div>
+              ) : (
+                <ul className="flex flex-col gap-4">
+                  {reviews.map((review) => (
+                    <li key={review.id}>
+                      <Link
+                        to="/shelf/$userId"
+                        className="group"
+                        params={{ userId: review.authorId }}
+                      >
+                        <div className="flex gap-4 items-center">
+                          <div className="flex-none">
+                            {review.authorImg && (
+                              <img
+                                src={review.authorImg}
+                                className="w-12 h-12 rounded-full"
+                              />
+                            )}
+                          </div>
+                          <div className="flex flex-col">
+                            <div className="flex items-center gap-2">
+                              <p className="font-medium group-hover:underline">
+                                {review.authorName}
+                              </p>
+                              {user.isLoaded &&
+                                user.user?.id === review.authorId && (
+                                  <p className="bg-indigo-300 py-1 px-4 rounded-md text-sm font-medium border-[0.0125rem] border-indigo-200">
+                                    Me
+                                  </p>
+                                )}
+                            </div>
+
+                            <p>{review.content}</p>
+                          </div>
+                        </div>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            {props.isMine && <ReviewForm book={props.book} />}
           </div>
         </Drawer.Content>
       </Drawer.Portal>
@@ -167,10 +225,11 @@ const Book: React.FC<{ book: TBook }> = (props) => {
 
 export const Bookshelf: React.FC<{
   shelves: TBook[][];
+  isMine: boolean;
 }> = (props) => {
   return (
     <>
-      <div className="flex flex-col gap-1 p-1 bg-teal-900 rounded-md shadow-lg w-full">
+      <div className="flex flex-col gap-1 p-1 bg-indigo-900 rounded-md shadow-lg w-full">
         {props.shelves.map((shelf, idx) => (
           <div
             key={idx}
@@ -178,7 +237,7 @@ export const Bookshelf: React.FC<{
           >
             {shelf.map((book) => (
               <div className="flex-none self-end" key={book.id}>
-                <Book book={book} />
+                <Book book={book} isMine={props.isMine} />
               </div>
             ))}
           </div>

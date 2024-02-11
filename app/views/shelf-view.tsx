@@ -17,7 +17,7 @@ export const ShelfView = () => {
           {shelves.user.firstName}'s Bookshelf
         </p>
       </div>
-      <Bookshelf shelves={shelves.shelves} />
+      <Bookshelf shelves={shelves.shelves} isMine={false} />
     </>
   );
 };

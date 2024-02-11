@@ -25,8 +25,8 @@ export const MainLayout = () => {
         "max-w-[100rem] py-6 px-4 md:mx-auto md:w-[80%] lg:w-[85%] 2xl:w-[90%] h-[100dvh]"
       )}
     >
-      <div className="flex flex-col gap-4 h-full border-2 border-stone-800 rounded-md bg-amber-100/30">
-        <div className="bg-amber-200/40 rounded-md px-4 lg:px-12 flex justify-between items-center py-4">
+      <div className="flex flex-col gap-4 h-full border-2 border-stone-800 rounded-md bg-amber-50/30">
+        <div className="bg-amber-100/80 rounded-md px-4 lg:px-12 flex justify-between items-center py-4">
           <Link to="/dashboard">
             <h1 className="text-stone-950 font-semibold text-xl">
               BetterReads
@@ -34,7 +34,7 @@ export const MainLayout = () => {
           </Link>
           <SignedIn>
             <Button
-              className="bg-teal-800 text-stone-50 transition-colors hover:bg-teal-700 border-teal-900 w-max"
+              className="bg-indigo-800 text-stone-50 transition-colors hover:bg-indigo-700 border-indigo-900 w-max"
               asChild
             >
               <SignOutButton>

@@ -45,21 +45,26 @@ export const bookRouter = router({
         })
       )
       .mutation(async (opts) => {
-        return opts.ctx.prisma.book.update({
-          where: {
-            id: opts.input.id,
-          },
-          data: {
-            reviews: {
-              create: {
-                authorId: opts.ctx.user.id,
-                authorName: `${opts.ctx.user.firstName} ${opts.ctx.user.lastName}`,
-                authorImg: opts.ctx.user.imageUrl,
-                content: opts.input.content,
+        console.log("DWAAAAAAAAAAAA");
+        try {
+          return await opts.ctx.prisma.book.update({
+            where: {
+              id: opts.input.id,
+            },
+            data: {
+              reviews: {
+                create: {
+                  authorId: opts.ctx.user.id,
+                  authorName: `${opts.ctx.user.firstName} ${opts.ctx.user.lastName}`,
+                  authorImg: opts.ctx.user.imageUrl,
+                  content: opts.input.content,
+                },
               },
             },
-          },
-        });
+          });
+        } catch (err) {
+          console.log(err);
+        }
       }),
   },
   getRecs: authedProcedure.query(async (opts) => {

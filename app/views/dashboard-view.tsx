@@ -6,7 +6,7 @@ import { GetRecs } from "../components /getRecs";
 const Shelves = () => {
   const [shelves] = trpc.book.getShelf.useSuspenseQuery();
 
-  return <Bookshelf shelves={shelves} />;
+  return <Bookshelf shelves={shelves} isMine />;
 };
 
 export const DashboardView = () => {
@@ -17,7 +17,7 @@ export const DashboardView = () => {
         <BookScanner />
       </div>
       <Shelves />
-      <GetRecs />
+      {/* <GetRecs /> */}
     </>
   );
 };

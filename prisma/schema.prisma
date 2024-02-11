@@ -16,7 +16,8 @@ model Review {
   authorName String // The review's author
   authorId   String
   authorImg  String?
-  book       Book    @relation(fields: [id], references: [id])
+  bookId     String
+  book       Book    @relation(fields: [bookId], references: [id])
 }
 
 model Book {
