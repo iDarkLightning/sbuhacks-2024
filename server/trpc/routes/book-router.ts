@@ -2,6 +2,26 @@ import { authedProcedure, publicProcedure, router } from "..";
 import { z } from "zod";
 import { isPrismaNotFoundError } from "../../lib/utils";
 import { fetchBookFromIsbn } from "../../lib/api/books";
+import { type PrismaClient } from "@prisma/client";
+
+const getShelvesForUser = async (prisma: PrismaClient, userId: string) => {
+  const books = await prisma.book.findMany({
+    where: {
+      ownedBy: {
+        has: userId,
+      },
+    },
+  });
+
+  const CHUNK_SIZE = 15;
+  const chunks = [];
+
+  for (let i = 0; i < books.length; i += CHUNK_SIZE) {
+    chunks.push(books.slice(i, i + CHUNK_SIZE));
+  }
+
+  return chunks;
+};
 
 export const bookRouter = router({
   review: {
@@ -55,23 +75,13 @@ export const bookRouter = router({
       };
     }),
   getShelf: authedProcedure.query(async (opts) => {
-    const books = await opts.ctx.prisma.book.findMany({
-      where: {
-        ownedBy: {
-          has: opts.ctx.user.id,
-        },
-      },
-    });
-
-    const CHUNK_SIZE = 7;
-    const chunks = [];
-
-    for (let i = 0; i < books.length; i += CHUNK_SIZE) {
-      chunks.push(books.slice(i, i + CHUNK_SIZE));
-    }
-
-    return chunks;
+    return getShelvesForUser(opts.ctx.prisma, opts.ctx.user.id);
   }),
+  getShelfByUser: publicProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async (opts) => {
+      return getShelvesForUser(opts.ctx.prisma, opts.input.userId);
+    }),
   scan: authedProcedure
     .input(
       z.object({

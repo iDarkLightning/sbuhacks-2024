@@ -1,14 +1,38 @@
 import {
-  SignInButton,
+  RedirectToSignIn,
   SignOutButton,
   SignedIn,
   SignedOut,
 } from "@clerk/clerk-react";
+import { useState } from "react";
+import { FaSignOutAlt } from "react-icons/fa";
 import { BookScanner } from "../components /bookScanner";
 import { Bookshelf } from "../components /bookshelf";
-import { FaSignOutAlt } from "react-icons/fa";
+import { trpc } from "../lib/trpc";
 
-export const HomeView = () => {
+const Authed = () => {
+  const [isbn, setIsbn] = useState("");
+  const scan = trpc.book.scan.useMutation();
+
+  return (
+    <>
+      <input
+        type="text"
+        value={isbn}
+        onChange={(evt) => setIsbn(evt.target.value)}
+      />
+      <button onClick={() => scan.mutate({ isbn })}>Add Book</button>
+    </>
+  );
+};
+
+const Shelves = () => {
+  const [shelves] = trpc.book.getShelf.useSuspenseQuery();
+
+  return <Bookshelf shelves={shelves} />;
+};
+
+export const DashboardView = () => {
   return (
     <div>
       <SignedIn>
@@ -20,14 +44,15 @@ export const HomeView = () => {
               <FaSignOutAlt />
             </span>
           </SignOutButton>
+          <Authed />
         </div>
         <div className="p-2 m-auto md:w-[80%] lg:w-[50%]">
           <BookScanner />
-          <Bookshelf />
+          <Shelves />
         </div>
       </SignedIn>
       <SignedOut>
-        <SignInButton />
+        <RedirectToSignIn />
       </SignedOut>
     </div>
   );
