@@ -3,6 +3,7 @@ import { z } from "zod";
 import { isPrismaNotFoundError } from "../../lib/utils";
 import { fetchBookFromIsbn } from "../../lib/api/books";
 import { type PrismaClient } from "@prisma/client";
+// import { openai } from "../../lib/openai";
 
 const getShelvesForUser = async (prisma: PrismaClient, userId: string) => {
   const books = await prisma.book.findMany({
@@ -59,6 +60,40 @@ export const bookRouter = router({
         });
       }),
   },
+  getRecs: authedProcedure.query(async (opts) => {
+    // TODO: Top five books for the user?
+    const books = opts.ctx.prisma.book.findMany({
+      where: {
+        ownedBy: {
+          has: opts.ctx.user.id,
+        },
+      },
+    });
+
+    const parsedBooks = (await books)
+      .map((book) => {
+        return `${book.title} by ${book.author} (${book.subjects.join(", ")})`;
+      })
+      .join("; ");
+
+    // console.log(parsedBooks);
+
+    const completion = await opts.ctx.openai.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content:
+            "Use the following semicolon-separated list of book titles and their subjects to create a ranked list of relevant books I might also like. In describing each book, mention tropes, themes, subjects, and genres. List at least two books, but do not add more recommendations if they are not relevant.",
+        },
+        { role: "user", content: parsedBooks },
+      ],
+      model: "gpt-3.5-turbo",
+    });
+
+    console.log("ASKING THE BOT");
+
+    return completion.choices[0].message;
+  }),
   getOpenLibraryBook: publicProcedure
     .input(z.object({ isbn: z.string() }))
     .query(async (opts) => {

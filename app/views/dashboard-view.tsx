@@ -9,6 +9,7 @@ import { FaSignOutAlt } from "react-icons/fa";
 import { BookScanner } from "../components /bookScanner";
 import { Bookshelf } from "../components /bookshelf";
 import { trpc } from "../lib/trpc";
+import { GetRecs } from "../components /getRecs";
 
 const Authed = () => {
   const [isbn, setIsbn] = useState("");
@@ -50,6 +51,7 @@ export const DashboardView = () => {
           <BookScanner />
           <Shelves />
         </div>
+        <GetRecs />
       </SignedIn>
       <SignedOut>
         <RedirectToSignIn />
