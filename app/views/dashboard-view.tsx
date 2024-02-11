@@ -14,7 +14,7 @@ export const DashboardView = () => {
     <>
       <div className="flex justify-between my-4 md:items-center flex-col md:flex-row gap-2">
         <p className="text-lg font-semibold">My Bookshelf</p>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <BookScanner />
           <RecDrawer />
         </div>
