@@ -1,5 +1,6 @@
-import { TRPCError, initTRPC } from "@trpc/server";
+import { TRPCError, inferRouterOutputs, initTRPC } from "@trpc/server";
 import { createFetchContext } from "./context";
+import { type ApiRouter } from "./routes/__root";
 
 const t = initTRPC
   .context<ReturnType<ReturnType<typeof createFetchContext>>>()
@@ -23,4 +24,5 @@ export const authedProcedure = t.procedure.use(
   })
 );
 
-export { type ApiRouter } from "./routes/__root";
+export { ApiRouter };
+export type RouterOutput = inferRouterOutputs<ApiRouter>;
