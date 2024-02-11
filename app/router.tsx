@@ -4,14 +4,20 @@ import { createTRPCQueryUtils } from "@trpc/react-query";
 import { type ApiRouter } from "../server/trpc";
 import { trpc } from "./lib/trpc";
 import { rootRoute } from "./routes/__root";
-import { homeRoute } from "./routes/main";
+import { homeRoute } from "./routes/home";
+import { shelfRoute } from "./routes/shelf-routes";
+import { dashboardRoute } from "./routes/dashboard";
 
 interface CreateRouterOptions {
   trpcClient: ReturnType<typeof trpc.createClient>;
   queryClient: QueryClient;
 }
 
-const routeTree = rootRoute.addChildren([homeRoute]);
+const routeTree = rootRoute.addChildren([
+  homeRoute,
+  shelfRoute,
+  dashboardRoute,
+]);
 
 export const createRouter = ({
   trpcClient,
@@ -36,3 +42,9 @@ export const createRouter = ({
       authState: undefined!,
     },
   });
+
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: ReturnType<typeof createRouter>;
+  }
+}

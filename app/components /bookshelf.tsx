@@ -1,8 +1,8 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
+import React from "react";
 import { Drawer } from "vaul";
 import { RouterOutput } from "../../server/trpc";
 import { useWindowSize } from "../lib/hooks/use-window-size";
-import { trpc } from "../lib/trpc";
 import { cn } from "../lib/utils";
 
 type TBook = RouterOutput["book"]["getShelf"][number][number];
@@ -93,23 +93,21 @@ const Book = (props: { book: TBook }) => {
   );
 };
 
-export const Bookshelf = () => {
-  const [shelves] = trpc.book.getShelf.useSuspenseQuery();
-
+export const Bookshelf: React.FC<{
+  shelves: TBook[][];
+}> = (props) => {
   return (
-    <>
-      <div className="flex flex-col gap-1 p-1 bg-teal-900 rounded-md shadow-lg">
-        {shelves.map((shelf, idx) => (
-          <div
-            key={idx}
-            className="flex flex-row px-1 shadow-[inset_0_-15px_rgba(0,0,0,0.2)] scrollbar-thumb-stone-700 scrollbar-track-transparent scrollbar-thin overflow-x-auto overflow-y-clip h-[20ch] bg-amber-50 rounded-md"
-          >
-            {shelf.map((book) => (
-              <Book book={book} />
-            ))}
-          </div>
-        ))}
-      </div>
-    </>
+    <div className="flex flex-col gap-1 p-1 bg-teal-900 rounded-md shadow-lg">
+      {props.shelves.map((shelf, idx) => (
+        <div
+          key={idx}
+          className="flex flex-row px-1 shadow-[inset_0_-15px_rgba(0,0,0,0.2)] scrollbar-thumb-stone-700 scrollbar-track-transparent scrollbar-thin overflow-x-auto overflow-y-clip h-[20ch] bg-amber-50 rounded-md"
+        >
+          {shelf.map((book) => (
+            <Book book={book} />
+          ))}
+        </div>
+      ))}
+    </div>
   );
 };
