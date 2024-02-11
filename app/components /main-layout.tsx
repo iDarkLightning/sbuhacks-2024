@@ -57,7 +57,7 @@ export const MainLayout = () => {
             </div>
           </SignedIn>
         </div>
-        <div className="p-2 mx-auto w-full md:w-[80%] lg:w-[50%]">
+        <div className="p-2 mx-auto w-full md:w-[90%] lg:w-[80%] xl:w-[70%]">
           <Outlet />
         </div>
       </div>
