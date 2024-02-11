@@ -26,7 +26,7 @@ export const MainLayout = () => {
       )}
     >
       <div className="flex flex-col gap-4 h-full border-2 border-stone-800 rounded-md bg-amber-50/30">
-        <div className="bg-amber-100/80 rounded-md px-4 lg:px-12 flex justify-between items-center py-4">
+        <div className="bg-amber-100/80 rounded-md px-4 lg:px-12 flex justify-between md:items-center py-4 flex-col md:flex-row">
           <Link to="/dashboard">
             <h1 className="text-stone-950 font-semibold text-xl">
               BetterReads
