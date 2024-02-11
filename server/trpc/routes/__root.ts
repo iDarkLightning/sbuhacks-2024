@@ -5,7 +5,7 @@ export const apiRouter = router({
   book: bookRouter,
 
   me: authedProcedure.query(({ ctx }) => {
-    return ctx.user.firstName;
+    return ctx.user;
   }),
 });
 

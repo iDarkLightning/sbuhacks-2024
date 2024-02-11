@@ -1,19 +1,23 @@
 import { getRouteApi } from "@tanstack/react-router";
-import { trpc } from "../lib/trpc";
 import { Bookshelf } from "../components /bookshelf";
+import { trpc } from "../lib/trpc";
 
-const routeApi = getRouteApi("/shelf/$userId");
+const routeApi = getRouteApi("/main-layout/shelf/$userId");
 
 export const ShelfView = () => {
   const params = routeApi.useParams();
   const [shelves] = trpc.book.getShelfByUser.useSuspenseQuery({
     userId: params.userId,
-  })
+  });
 
   return (
-    <div>
-      <h1>Shelf</h1>
-      <Bookshelf shelves={shelves} />
-    </div>
+    <>
+      <div className="flex justify-between my-4 items-center">
+        <p className="text-lg font-semibold">
+          {shelves.user.firstName}'s Bookshelf
+        </p>
+      </div>
+      <Bookshelf shelves={shelves.shelves} />
+    </>
   );
 };

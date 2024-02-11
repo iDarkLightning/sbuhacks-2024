@@ -7,6 +7,7 @@ import { rootRoute } from "./routes/__root";
 import { homeRoute } from "./routes/home";
 import { shelfRoute } from "./routes/shelf-routes";
 import { dashboardRoute } from "./routes/dashboard";
+import { mainLayout } from "./routes/_layout";
 
 interface CreateRouterOptions {
   trpcClient: ReturnType<typeof trpc.createClient>;
@@ -15,8 +16,7 @@ interface CreateRouterOptions {
 
 const routeTree = rootRoute.addChildren([
   homeRoute,
-  shelfRoute,
-  dashboardRoute,
+  mainLayout.addChildren([shelfRoute, dashboardRoute]),
 ]);
 
 export const createRouter = ({
@@ -46,5 +46,8 @@ export const createRouter = ({
 declare module "@tanstack/react-router" {
   interface Register {
     router: ReturnType<typeof createRouter>;
+  }
+  interface StaticDataRouteOption {
+    requiresAuth?: boolean;
   }
 }
