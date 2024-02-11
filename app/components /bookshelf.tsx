@@ -4,8 +4,65 @@ import { RouterOutput } from "../../server/trpc";
 import { useWindowSize } from "../lib/hooks/use-window-size";
 import { trpc } from "../lib/trpc";
 import { cn } from "../lib/utils";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+} from "./ui/form";
+import React from "react";
 
 type TBook = RouterOutput["book"]["getShelf"][number][number];
+
+const reviewFormSchema = z.object({
+  content: z.string().min(8), // just enough to say "fuck you"
+});
+
+const ReviewForm = () => {
+  // 1. Define your form.
+  const form = useForm<z.infer<typeof reviewFormSchema>>({
+    resolver: zodResolver(reviewFormSchema),
+    defaultValues: {
+      content: "",
+      // username: "",
+    },
+  });
+
+  const onSubmit = (values: z.infer<typeof reviewFormSchema>) => {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
+    console.log(values);
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="content"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Content</FormLabel>
+              <FormControl>
+                <Input placeholder="This book is so good!" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Submit</Button>
+      </form>
+    </Form>
+  );
+};
 
 const BookCover = (props: { book: TBook }) => {
   const { data } = useSuspenseQuery({
@@ -19,7 +76,7 @@ const BookCover = (props: { book: TBook }) => {
   });
 
   return (
-    <>
+    <div className="">
       {data.ok ? (
         <img
           className="hover:cursor-pointer mr-1 rounded-md h-[19ch] w-auto"
@@ -30,11 +87,11 @@ const BookCover = (props: { book: TBook }) => {
           {props.book.title}
         </div>
       )}
-    </>
+    </div>
   );
 };
 
-const Book = (props: { book: TBook }) => {
+const Book: React.FC<{ book: TBook }> = (props) => {
   const { isDesktop } = useWindowSize();
 
   return (
@@ -88,6 +145,7 @@ const Book = (props: { book: TBook }) => {
               {isDesktop && <BookCover book={props.book} />}
             </div>
           </div>
+          <ReviewForm />
         </Drawer.Content>
       </Drawer.Portal>
     </Drawer.Root>
@@ -103,10 +161,10 @@ export const Bookshelf = () => {
         {shelves.map((shelf, idx) => (
           <div
             key={idx}
-            className="flex flex-row px-1 shadow-[inset_0_-15px_rgba(0,0,0,0.2)] scrollbar-thumb-stone-700 scrollbar-track-transparent scrollbar-thin overflow-x-auto overflow-y-clip h-[20ch] bg-amber-50 rounded-md"
+            className="px-1 shadow-[inset_0_-15px_rgba(0,0,0,0.2)] scrollbar-thumb-stone-700 scrollbar-track-transparent scrollbar-thin overflow-x-scroll overflow-y-clip h-[20ch] bg-amber-50 rounded-md"
           >
-            {shelf.map((book) => (
-              <Book book={book} />
+            {shelf.map((book, idx) => (
+              <Book book={book} key={idx} />
             ))}
           </div>
         ))}

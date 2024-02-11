@@ -27,8 +27,7 @@ export const bookRouter = router({
       .mutation(async (opts) => {
         const review = await opts.ctx.prisma.review.create({
           data: {
-            content: opts.input.title,
-            title: opts.input.content,
+            content: opts.input.content,
             author: opts.ctx.user.id,
           },
         });
