@@ -1,25 +1,25 @@
+import { useUser } from "@clerk/clerk-react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import React from "react";
+import { useForm } from "react-hook-form";
 import { Drawer } from "vaul";
+import { z } from "zod";
 import { RouterOutput } from "../../server/trpc";
 import { useWindowSize } from "../lib/hooks/use-window-size";
+import { trpc } from "../lib/trpc";
 import { cn } from "../lib/utils";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { Button } from "./ui/button";
-import { Input } from "./ui/input";
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
 } from "./ui/form";
-import { trpc } from "../lib/trpc";
-import { useUser } from "@clerk/clerk-react";
-import { Link } from "@tanstack/react-router";
+import { Textarea } from "./ui/textarea";
 
 type TBook = RouterOutput["book"]["getShelf"][number][number];
 
@@ -55,7 +55,7 @@ const ReviewForm: React.FC<{ book: TBook }> = (props) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 my-8 max-w-3xl"
+        className="space-y-8 my-4 max-w-3xl"
       >
         <FormField
           control={form.control}
@@ -65,14 +65,16 @@ const ReviewForm: React.FC<{ book: TBook }> = (props) => {
               <FormLabel>Review</FormLabel>
               <FormControl>
                 <div className="flex gap-2 items-center">
-                  <Input placeholder="This book is so good!" {...field} />
-                  <Button type="submit">Submit</Button>
+                  <Textarea placeholder="This book is so good!" {...field} />
                 </div>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+        <Button type="submit" className="w-full">
+          Post
+        </Button>
       </form>
     </Form>
   );
