@@ -27,15 +27,15 @@ export const bookRouter = router({
   review: {
     getAll: publicProcedure
       .input(z.object({ id: z.string() }))
-      .query(async (opts) =>
-        opts.ctx.prisma.review.findMany({
+      .query(async (opts) => {
+        return opts.ctx.prisma.review.findMany({
           where: {
             book: {
               id: opts.input.id, // getting the reviews for a book
             },
           },
-        })
-      ),
+        });
+      }),
     post: authedProcedure
       .input(
         z.object({
@@ -51,7 +51,9 @@ export const bookRouter = router({
           data: {
             reviews: {
               create: {
-                author: opts.ctx.user.id,
+                authorId: opts.ctx.user.id,
+                authorName: `${opts.ctx.user.firstName} ${opts.ctx.user.lastName}`,
+                authorImg: opts.ctx.user.imageUrl,
                 content: opts.input.content,
               },
             },

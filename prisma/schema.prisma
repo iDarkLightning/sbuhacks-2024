@@ -11,10 +11,12 @@ datasource db {
 }
 
 model Review {
-  id       String   @id @default(cuid())
-  content  String
-  author   String // The review's author 
-  book     Book     @relation(fields: [id], references: [id])
+  id         String  @id @default(cuid())
+  content    String
+  authorName String // The review's author
+  authorId   String
+  authorImg  String?
+  book       Book    @relation(fields: [id], references: [id])
 }
 
 model Book {
@@ -24,5 +26,5 @@ model Book {
   author   String[] // the author of a book
   subjects String[]
   ownedBy  String[]
-  reviews  Review[] 
+  reviews  Review[]
 }
