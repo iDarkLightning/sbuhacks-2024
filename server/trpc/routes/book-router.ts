@@ -24,6 +24,49 @@ const getShelvesForUser = async (prisma: PrismaClient, userId: string) => {
 };
 
 export const bookRouter = router({
+  review: {
+    getAll: publicProcedure
+      .input(z.object({ isbn: z.string() }))
+      .query(async (opts) =>
+        opts.ctx.prisma.review.findMany({
+          where: {
+            book: {
+              isbn: opts.input.isbn, // getting the reviews for a book
+            },
+          },
+        })
+      ),
+    post: authedProcedure
+      .input(
+        z.object({
+          isbn: z.string(),
+          content: z.string(),
+          title: z.string(),
+        })
+      )
+      .mutation(async (opts) => {
+        const review = await opts.ctx.prisma.review.create({
+          data: {
+            content: opts.input.title,
+            title: opts.input.content,
+            author: opts.ctx.user.id,
+          },
+        });
+
+        opts.ctx.prisma.book.update({
+          where: {
+            isbn: opts.input.isbn,
+          },
+          data: {
+            reviews: {
+              connect: {
+                id: review.id,
+              },
+            },
+          },
+        });
+      }),
+  },
   getOpenLibraryBook: publicProcedure
     .input(z.object({ isbn: z.string() }))
     .query(async (opts) => {

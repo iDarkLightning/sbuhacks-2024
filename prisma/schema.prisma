@@ -10,11 +10,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Review {
+  id       String   @id @default(cuid())
+  title    String
+  content  String
+  author   String // The review's author 
+  book     Book     @relation(fields: [id], references: [id])
+}
+
 model Book {
   id       String   @id @default(cuid())
   isbn     String   @unique
   title    String
-  author   String[]
+  author   String[] // the author of a book
   subjects String[]
   ownedBy  String[]
+  reviews  Review[] 
 }

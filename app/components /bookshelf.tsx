@@ -50,7 +50,9 @@ const Book = (props: { book: TBook }) => {
         <Drawer.Content
           className={cn(
             "bg-white flex flex-col rounded-t-[10px] mt-24 fixed bottom-0 right-0",
-            isDesktop ? "h-full w-max min-w-[40%]" : "w-full h-max max-[95%]"
+            isDesktop
+              ? "h-full w-[80%] md:w-[70%] lg:w-[60%]"
+              : "w-full h-max max-[95%]"
           )}
         >
           <div
@@ -59,11 +61,10 @@ const Book = (props: { book: TBook }) => {
               isDesktop ? "p-12" : "p-4"
             )}
           >
-            <div className="flex gap-8 items-center flex-col md:flex-row">
-              {!isDesktop && (
-                <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-4" />
-              )}
-
+            {!isDesktop && (
+              <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-4" />
+            )}
+            <div className="flex gap-8 items-center flex-row">
               <div className="flex flex-col justify-center">
                 <div>
                   <Drawer.Title className="font-medium mb-1 text-xl">
