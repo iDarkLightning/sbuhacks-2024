@@ -13,7 +13,7 @@ const getShelvesForUser = async (prisma: PrismaClient, userId: string) => {
     },
   });
 
-  const CHUNK_SIZE = 15;
+  const CHUNK_SIZE = 7;
   const chunks = [];
 
   for (let i = 0; i < books.length; i += CHUNK_SIZE) {

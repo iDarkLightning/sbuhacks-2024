@@ -75,18 +75,18 @@ const BookCover = (props: { book: TBook }) => {
   });
 
   return (
-    <div className="">
+    <>
       {data.ok ? (
         <img
           className="hover:cursor-pointer mr-1 rounded-md h-[19ch] w-auto"
           src={data.url}
         />
       ) : (
-        <div className="hover:cursor-pointer mr-[3ch] rounded-sm font-semibold rotate-180 [user-select:none] p-2 whitespace-nowrap [writing-mode:vertical-rl] bg-teal-950 text-amber-50">
+        <div className="hover:cursor-pointer mr-[3ch] rounded-sm font-semibold rotate-180 [user-select:none] p-2 whitespace-nowrap [writing-mode:vertical-rl] bg-teal-950 text-amber-50 text-ellipsis max-h-[18ch]">
           {props.book.title}
         </div>
       )}
-    </div>
+    </>
   );
 };
 
@@ -160,10 +160,12 @@ export const Bookshelf: React.FC<{
         {props.shelves.map((shelf, idx) => (
           <div
             key={idx}
-            className="px-1 shadow-[inset_0_-15px_rgba(0,0,0,0.2)] scrollbar-thumb-stone-700 scrollbar-track-transparent scrollbar-thin overflow-x-scroll overflow-y-clip h-[20ch] bg-amber-50 rounded-md"
+            className="flex flex-row flex-nowrap px-1 shadow-[inset_0_-15px_rgba(0,0,0,0.2)] scrollbar-thumb-stone-700 scrollbar-track-transparent scrollbar-thin overflow-x-auto overflow-y-clip h-[20ch] bg-amber-50 rounded-md"
           >
             {shelf.map((book) => (
-              <Book book={book} />
+              <div className="flex-none self-end">
+                <Book book={book} />
+              </div>
             ))}
           </div>
         ))}
