@@ -5,5 +5,10 @@ export const GetRecs = () => {
     retry: false,
   });
 
-  return <div>{JSON.stringify(data)}</div>;
+  return (
+    <>
+      <h1 className="text-2xl">AI Recommends</h1>
+      <div className="whitespace-pre-wrap">{data.content}</div>
+    </>
+  );
 };
