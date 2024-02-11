@@ -33,17 +33,28 @@ export const MainLayout = () => {
             </h1>
           </Link>
           <SignedIn>
-            <Button
-              className="bg-indigo-800 text-stone-50 transition-colors hover:bg-indigo-700 border-indigo-900 w-max"
-              asChild
-            >
-              <SignOutButton>
-                <span className="flex gap-4 w-full">
-                  <p className="mr-4">Sign Out</p>
-                  <FaSignOutAlt />
-                </span>
-              </SignOutButton>
-            </Button>
+            <div className="flex gap-2 items-center">
+              <Button
+                onClick={() => {
+                  navigator.clipboard
+                    .writeText(`${window.location.host}/shelf/${auth.userId}`)
+                    .then(() => alert("Link copied!"));
+                }}
+              >
+                Copy Shelf Link
+              </Button>
+              <Button
+                className="bg-indigo-800 text-stone-50 transition-colors hover:bg-indigo-700 border-indigo-900 w-max"
+                asChild
+              >
+                <SignOutButton>
+                  <span className="flex gap-4 w-full">
+                    <p className="mr-4">Sign Out</p>
+                    <FaSignOutAlt />
+                  </span>
+                </SignOutButton>
+              </Button>
+            </div>
           </SignedIn>
         </div>
         <div className="p-2 mx-auto w-full md:w-[80%] lg:w-[50%]">
