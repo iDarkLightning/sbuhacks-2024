@@ -92,7 +92,7 @@ const BookCover = (props: { book: TBook }) => {
           src={data.url}
         />
       ) : (
-        <div className="hover:cursor-pointer mr-[3ch] rounded-sm font-semibold rotate-180 [user-select:none] p-2 whitespace-nowrap [writing-mode:vertical-rl] bg-teal-950 text-amber-50 text-ellipsis max-h-[18ch]">
+        <div className="hover:cursor-pointer mr-[3ch] rounded-sm font-semibold rotate-180 [user-select:none] p-2 whitespace-nowrap [writing-mode:vertical-rl] bg-teal-950 text-amber-50 truncate max-h-[18ch]">
           {props.book.title}
         </div>
       )}
