@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useState } from "react";
 // import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import { useZxing } from "react-zxing";
 import { Drawer } from "vaul";
@@ -25,21 +25,14 @@ const Scanner: React.FC<{
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsbn: React.Dispatch<React.SetStateAction<string>>;
 }> = (props) => {
-  const [result, setResult] = useState("");
-
   const { ref } = useZxing({
     onDecodeResult(result) {
       const text = result.getText();
-      setResult(text);
       props.setIsbn(text);
 
       props.setIsOpen(true);
     },
   });
-
-  useEffect(() => {
-    console.log(result);
-  }, [result]);
 
   return (
     <div className="h-96 rounded-md overflow-hidden bg-black">
@@ -62,20 +55,21 @@ export const BookScanner = () => {
   });
 
   const addBook = () => {
-    console.log("HI??");
     scan.mutate({ isbn });
   };
 
   return (
     <Drawer.Root shouldScaleBackground>
       <Drawer.Trigger asChild>
-        <button>Scan New Book</button>
+        <Button className="bg-amber-300 text-stone-800 transition-colors hover:bg-amber-400/50 border-amber-500">
+          Scan New Book
+        </Button>
       </Drawer.Trigger>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 bg-black/40" />
-        <Drawer.Content className="bg-zinc-100 flex flex-col rounded-t-[10px] mt-24 fixed bottom-0 right-0 left-0">
-          <div className="p-4 bg-white rounded-t-[10px] flex-1">
-            <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-4" />
+        <Drawer.Content className="bg-amber-50/80 backdrop-blur-sm flex flex-col rounded-t-[10px] mt-24 fixed bottom-0 right-0 left-0">
+          <div className="p-4 rounded-t-[10px] flex-1">
+            <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-amber-800 mb-4" />
             <div className="flex items-center justify-center flex-col">
               <Drawer.Title className="font-medium mb-1 text-center text-xl">
                 Scan your book
@@ -107,8 +101,11 @@ export const BookScanner = () => {
                       </Suspense>
                     </div>
                     <div className="w-full flex gap-2">
-                      <Button className="flex-1" onClick={addBook}>
-                        Add
+                      <Button
+                        className="bg-amber-300 text-stone-800 transition-colors hover:bg-amber-400/50 border-amber-500 w-full"
+                        onClick={addBook}
+                      >
+                        Add Book
                       </Button>
                     </div>
                   </div>

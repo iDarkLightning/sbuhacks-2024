@@ -108,7 +108,18 @@ export const bookRouter = router({
   getShelfByUser: publicProcedure
     .input(z.object({ userId: z.string() }))
     .query(async (opts) => {
-      return getShelvesForUser(opts.ctx.prisma, opts.input.userId);
+      const user = await opts.ctx.clerkClient.users.getUser(opts.input.userId);
+
+      return {
+        user: {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          hasImage: user.hasImage,
+          image: user.imageUrl,
+        },
+        shelves: await getShelvesForUser(opts.ctx.prisma, user.id),
+      };
     }),
   scan: authedProcedure
     .input(

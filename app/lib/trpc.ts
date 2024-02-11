@@ -11,7 +11,6 @@ export const createTrpcClient = (getToken: GetToken) =>
         url: "/api",
         async headers() {
           const token = await getToken();
-          console.log(token);
 
           return {
             Authorization: token ? `Bearer ${token}` : "",

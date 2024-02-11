@@ -170,14 +170,14 @@ export const Bookshelf: React.FC<{
 }> = (props) => {
   return (
     <>
-      <div className="flex flex-col gap-1 p-1 bg-teal-900 rounded-md shadow-lg">
+      <div className="flex flex-col gap-1 p-1 bg-teal-900 rounded-md shadow-lg w-full">
         {props.shelves.map((shelf, idx) => (
           <div
             key={idx}
             className="flex flex-row flex-nowrap px-1 shadow-[inset_0_-15px_rgba(0,0,0,0.2)] scrollbar-thumb-stone-700 scrollbar-track-transparent scrollbar-thin overflow-x-auto overflow-y-clip h-[20ch] bg-amber-50 rounded-md"
           >
             {shelf.map((book) => (
-              <div className="flex-none self-end">
+              <div className="flex-none self-end" key={book.id}>
                 <Book book={book} />
               </div>
             ))}
