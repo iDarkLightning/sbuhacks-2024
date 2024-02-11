@@ -72,18 +72,18 @@ export const bookRouter = router({
 
     const parsedBooks = (await books)
       .map((book) => {
-        return `${book.title} by ${book.author} (${book.subjects.join(", ")})`;
+        return `${book.title} by ${book.author} (${book.subjects
+          .splice(4)
+          .join(", ")})`;
       })
       .join("; ");
-
-    // console.log(parsedBooks);
 
     const completion = await opts.ctx.openai.chat.completions.create({
       messages: [
         {
           role: "system",
           content:
-            "Use the following semicolon-separated list of book titles and their subjects to create a ranked list of relevant books I might also like. In describing each book, mention tropes, themes, subjects, and genres. List at least two books, but do not add more recommendations if they are not relevant.",
+            "Use the following semicolon-separated list of book titles and their subjects to create a ranked list of 5 relevant books I might also like. In describing each book, mention tropes, themes, subjects, and genres. Do not recommend books that are listed.",
         },
         { role: "user", content: parsedBooks },
       ],
