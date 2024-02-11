@@ -7,7 +7,7 @@ const bookResponseSchema = z.object({
       z.object({
         title: z.string(),
         author_name: z.array(z.string()),
-        subject: z.array(z.string()),
+        subject: z.array(z.string()).catch([]),
       })
     )
     .length(1),
