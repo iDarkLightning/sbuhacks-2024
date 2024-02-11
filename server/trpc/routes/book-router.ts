@@ -26,12 +26,12 @@ const getShelvesForUser = async (prisma: PrismaClient, userId: string) => {
 export const bookRouter = router({
   review: {
     getAll: publicProcedure
-      .input(z.object({ isbn: z.string() }))
+      .input(z.object({ id: z.string() }))
       .query(async (opts) =>
         opts.ctx.prisma.review.findMany({
           where: {
             book: {
-              isbn: opts.input.isbn, // getting the reviews for a book
+              id: opts.input.id, // getting the reviews for a book
             },
           },
         })
@@ -39,27 +39,20 @@ export const bookRouter = router({
     post: authedProcedure
       .input(
         z.object({
-          isbn: z.string(),
+          id: z.string(),
           content: z.string(),
-          title: z.string(),
         })
       )
       .mutation(async (opts) => {
-        const review = await opts.ctx.prisma.review.create({
-          data: {
-            content: opts.input.content,
-            author: opts.ctx.user.id,
-          },
-        });
-
-        opts.ctx.prisma.book.update({
+        return opts.ctx.prisma.book.update({
           where: {
-            isbn: opts.input.isbn,
+            id: opts.input.id,
           },
           data: {
             reviews: {
-              connect: {
-                id: review.id,
+              create: {
+                author: opts.ctx.user.id,
+                content: opts.input.content,
               },
             },
           },

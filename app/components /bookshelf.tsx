@@ -15,9 +15,9 @@ import {
   FormItem,
   FormLabel,
   FormControl,
-  FormDescription,
   FormMessage,
 } from "./ui/form";
+import { trpc } from "../lib/trpc";
 
 type TBook = RouterOutput["book"]["getShelf"][number][number];
 
@@ -25,7 +25,7 @@ const reviewFormSchema = z.object({
   content: z.string().min(8), // just enough to say "fuck you"
 });
 
-const ReviewForm = () => {
+const ReviewForm: React.FC<{ book: TBook }> = (props) => {
   // 1. Define your form.
   const form = useForm<z.infer<typeof reviewFormSchema>>({
     resolver: zodResolver(reviewFormSchema),
@@ -34,11 +34,19 @@ const ReviewForm = () => {
       // username: "",
     },
   });
+  const utils = trpc.useUtils();
+  const postReview = trpc.book.review.post.useMutation({
+    onSettled: () => utils.book.review.getAll.invalidate(),
+  });
 
   const onSubmit = (values: z.infer<typeof reviewFormSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+
+    postReview.mutate({
+      id: props.book.id,
+      content: values.content,
+    });
   };
 
   return (
@@ -49,15 +57,17 @@ const ReviewForm = () => {
           name="content"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Content</FormLabel>
+              <FormLabel>Review</FormLabel>
               <FormControl>
-                <Input placeholder="This book is so good!" {...field} />
+                <div className="flex gap-2 items-center">
+                  <Input placeholder="This book is so good!" {...field} />
+                  <Button type="submit">Submit</Button>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
       </form>
     </Form>
   );
@@ -92,6 +102,9 @@ const BookCover = (props: { book: TBook }) => {
 
 const Book: React.FC<{ book: TBook }> = (props) => {
   const { isDesktop } = useWindowSize();
+  const [reviews] = trpc.book.review.getAll.useSuspenseQuery({
+    id: props.book.id,
+  });
 
   return (
     <Drawer.Root
@@ -108,7 +121,7 @@ const Book: React.FC<{ book: TBook }> = (props) => {
             "bg-white flex flex-col rounded-t-[10px] mt-24 fixed bottom-0 right-0",
             isDesktop
               ? "h-full w-[80%] md:w-[70%] lg:w-[60%]"
-              : "w-full h-max max-[95%]"
+              : "w-full h-max max-h-[95%]"
           )}
         >
           <div
@@ -143,8 +156,9 @@ const Book: React.FC<{ book: TBook }> = (props) => {
               </div>
               {isDesktop && <BookCover book={props.book} />}
             </div>
+            <p>{JSON.stringify(reviews)}</p>
+            <ReviewForm book={props.book} />
           </div>
-          <ReviewForm />
         </Drawer.Content>
       </Drawer.Portal>
     </Drawer.Root>
